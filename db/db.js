@@ -1,4 +1,6 @@
 var mysql = require('mysql');
+var user = require('./user');
+
 var db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -12,3 +14,5 @@ db.connect(function(err) {
   }
   console.log('connected as id ' + db.threadId);
 });
+
+exports.registerNewUser = (req,res) => user.registerNewUser(req,res,db);
