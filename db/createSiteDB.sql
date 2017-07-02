@@ -20,7 +20,7 @@ USE `sitedb` ;
 DROP TABLE IF EXISTS `sitedb`.`location` ;
 
 CREATE TABLE IF NOT EXISTS `sitedb`.`location` (
-  `locationID` INT NOT NULL,
+  `locationID` INT NOT NULL AUTO_INCREMENT,
   `longitude` DECIMAL(10,6) NULL,
   `latitude` DECIMAL(10,6) NULL,
   PRIMARY KEY (`locationID`))
@@ -33,7 +33,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `sitedb`.`university` ;
 
 CREATE TABLE IF NOT EXISTS `sitedb`.`university` (
-  `universityID` INT NOT NULL,
+  `universityID` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
   `numStudents` INT NULL,
   `picture` BINARY(255) NULL,
@@ -54,7 +54,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `sitedb`.`user` ;
 
 CREATE TABLE IF NOT EXISTS `sitedb`.`user` (
-  `userID` INT NOT NULL,
+  `userID` INT NOT NULL AUTO_INCREMENT,
   `emailAddress` VARCHAR(255) NULL,
   `password` VARCHAR(255) NULL,
   `type` VARCHAR(255) NULL,
@@ -75,7 +75,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `sitedb`.`RSO` ;
 
 CREATE TABLE IF NOT EXISTS `sitedb`.`RSO` (
-  `rsoID` INT NOT NULL,
+  `rsoID` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
   `active` TINYINT NULL,
   `university_universityID` INT NOT NULL,
@@ -102,7 +102,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `sitedb`.`event` ;
 
 CREATE TABLE IF NOT EXISTS `sitedb`.`event` (
-  `eventID` INT NOT NULL,
+  `eventID` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
   `startDate` DATETIME NULL,
   `endDate` DATETIME NULL,
@@ -135,7 +135,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `sitedb`.`comment` ;
 
 CREATE TABLE IF NOT EXISTS `sitedb`.`comment` (
-  `commentID` INT NOT NULL,
+  `commentID` INT NOT NULL AUTO_INCREMENT,
   `content` VARCHAR(255) NULL,
   `user_userID` INT NOT NULL,
   `event_eventID` INT NOT NULL,
