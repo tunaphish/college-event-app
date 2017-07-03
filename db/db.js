@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var user = require('./user');
+var event = require('./event');
 
 var db = mysql.createConnection({
     host: 'localhost',
@@ -12,7 +13,7 @@ db.connect(function(err) {
     console.error('error connecting: ' + err.stack);
     return;
   }
-  console.log('connected as id ' + db.threadId);
 });
 
-exports.registerNewUser = (req,res) => user.registerNewUser(req,res,db);
+exports.registerUser = (req,res) => user.registerUser(req,res,db);
+exports.registerEvent = (req,res) => event.registerEvent(req,res,db);

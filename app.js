@@ -25,7 +25,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 
-app.post('/register', db.registerNewUser);
+app.post('/registerUser', db.registerUser);
+app.post('/registerEvent', db.registerEvent);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

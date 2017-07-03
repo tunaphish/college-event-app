@@ -15,7 +15,7 @@ function registerNewUser(req, res, db) {
       console.log(error);
       console.log(results);
       console.log(fields);
-      res.send(newUser);
   });
+  res.redirect('/');
 }
 exports.registerNewUser = registerNewUser;

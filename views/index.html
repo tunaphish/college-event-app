@@ -2,44 +2,79 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Sign Up</title>
+    <title>Register Event</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link href="stylesheets\bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
   </head>
   <body class="container">
-    <div class="col-md-4 col-md-offset-4">
-      <form class="form-horizontal" action="/register" method="POST">
+    <div>
+      <form class="form-vertical" action="/registerEvent" method="POST">
         <fieldset>
           <div id="legend">
-            <legend class="">Register</legend>
+            <legend class="">Register Event</legend>
           </div>
 
           <div class="control-group">
-            <!-- E-mail -->
-            <label class="control-label" for="email">E-mail</label>
+            <label class="control-label">Event Name</label>
             <div class="controls">
-              <input type="text" id="email" name="email" placeholder="" class="input-xlarge">
+              <input type="text" id="name" name="name" placeholder="" class="input-xlarge" autofocus required>
             </div>
           </div>
 
           <div class="control-group">
-            <!-- Password-->
-            <label class="control-label" for="password">Password</label>
+            <label class="control-label">Contact Phone</label>
             <div class="controls">
-              <input type="password" id="password" name="password" placeholder="" class="input-xlarge">
+              <input type="tel" id="contactPhone" name="contactPhone" placeholder="" class="input-xlarge" autofocus required>
             </div>
           </div>
 
           <div class="control-group">
-            <!-- Password -->
-            <label class="control-label"  for="password_confirm">Password (Confirm)</label>
+            <label class="control-label">Contact Email</label>
             <div class="controls">
-              <input type="password" id="password_confirm" name="password_confirm" placeholder="" class="input-xlarge">
+              <input type="text" id="contactEmail" name="contactEmail" placeholder="" class="input-xlarge" autofocus required>
             </div>
           </div>
 
           <div class="control-group">
-            <!-- Button -->
+            <label class="control-label">Event Type</label>
+            <div class="controls">
+              <input type="text" id="type" name="type" placeholder="" class="input-xlarge" autofocus required>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Date and Time</label>
+            <div class="controls">
+                  <input type="text" id="date" name="date" readonly class="form_datetime">
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Location</label>
+              <div class="controls">
+                <div id="map" name="map" style="width:100%;height:400px;"></div>
+                <script>
+                  var map;
+                  function initMap() {
+                    map = new google.maps.Map(document.getElementById('map'), {
+                      center: {lat: 28.6024274, lng: -81.200081},
+                      zoom: 16
+                    });
+                  }
+                </script>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Event Scope</label>
+            <div class="controls">
+              <label class="radio-inline"><input type="radio" name="scope">Public</label>
+              <label class="radio-inline"><input type="radio" name="scope">Private</label>
+              <label class="radio-inline"><input type="radio" name="scope">RSO Only</label>
+            </div>
+          </div>
+
+          <div class="control-group">
             <div class="controls">
               <p></p>
               <button class="btn btn-success">Register</button>
@@ -48,5 +83,22 @@
         </fieldset>
       </form>
     </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1iCiABq4fSxOzuP5a3U_mQDBCA1EyMRM&callback=initMap" async defer></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="javascripts\bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+    <script type="text/javascript">
+        $('.form_datetime').datetimepicker({
+          weekStart: 1,
+          todayBtn:  1,
+    		  autoclose: 1,
+    		  todayHighlight: 1,
+    		  startView: 2,
+    		  forceParse: 0,
+          showMeridian: 1
+        });
+    </script>
+
   </body>
 </html>
