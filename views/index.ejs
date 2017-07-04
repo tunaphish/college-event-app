@@ -25,7 +25,9 @@
             <label class="control-label">University</label>
             <div class="controls">
                 <select class="form-control" id="university" name="university">
-
+                   <% for(var i=0; i<universities.length; i++) {%>
+                    <option><%= universities[i].name %></option>
+                  <% } %>
                 </select>
             </div>
           </div>

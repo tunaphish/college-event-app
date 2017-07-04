@@ -3,12 +3,10 @@ var mysql = require('mysql');
 
 let registerQuery = 'INSERT INTO user SET ?;';
 
-function addUser(req, res, db) {
+function addLocation(req, res, db) {
   var newUser = {
-    emailAddress: req.body.email,
-    password: req.body.password,
-    type: 'Student',
-    university_universityID: 1
+    longitude: req.body.longitude,
+    latitude: req.body.latitude
   }
   let query = mysql.format(registerQuery, newUser);
   db.query(query, function(error, results, fields) {
@@ -18,4 +16,4 @@ function addUser(req, res, db) {
   });
   res.redirect('/');
 }
-exports.addUser = addUser;
+exports.addLocation = addLocation;

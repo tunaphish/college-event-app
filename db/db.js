@@ -1,6 +1,9 @@
 var mysql = require('mysql');
 var user = require('./user');
 var event = require('./event');
+var location = require('./location');
+var rso = require('./rso');
+var university = require('./university');
 
 var db = mysql.createConnection({
     host: 'localhost',
@@ -15,5 +18,8 @@ db.connect(function(err) {
   }
 });
 
-exports.registerUser = (req,res) => user.registerUser(req,res,db);
-exports.registerEvent = (req,res) => event.registerEvent(req,res,db);
+exports.addUser = (req,res) => user.addUser(req,res,db);
+exports.addEvent = (req,res) => event.addEvent(req,res,db);
+exports.addLocation = (req,res) => location.addLocation(req,res,db);
+exports.addRSO = (req,res) => rso.addRSO(req,res,db);
+exports.getUniversities = (req,res) => university.getUniversities(req,res,db);

@@ -4,16 +4,11 @@ var location = require('./location');
 
 let registerQuery = 'INSERT INTO event SET ?;';
 
-function addEvent(req, res, db) {
+function addRSO(req, res, db) {
   var newEvent = {
     name: req.body.name,
-    date: req.body.date,
-    contactPhone: req.body.contactPhone,
-    contactEmail: req.body.contactEmail,
-    type: req.body.type,
-    scope: req.body.scope,
-    location_locationID: 1,
-    user_userID: 1
+    university_universityID: 1,
+    user_adminID: 1
   }
   let query = mysql.format(registerQuery, newEvent);
   db.query(query, function(error, results, fields) {
@@ -23,4 +18,4 @@ function addEvent(req, res, db) {
   });
   res.redirect('/');
 }
-exports.addEvent = addEvent;
+exports.addRSO = addRSO;
