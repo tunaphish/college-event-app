@@ -11,9 +11,7 @@ function getUniversities(req, res, db) {
       for(var uni of results) {
           ret.push(uni);
       }
-      res.send(ret);
-      if (res) res.end("over");
+      return ret;
   });
-  sql.end();
 }
 exports.getUniversities = getUniversities;

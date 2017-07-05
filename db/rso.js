@@ -7,7 +7,7 @@ let registerQuery = 'INSERT INTO event SET ?;';
 function addRSO(req, res, db) {
   var newEvent = {
     name: req.body.name,
-    university_universityID: 1,
+    university_universityID: req.body.university,
     user_adminID: 1
   }
   let query = mysql.format(registerQuery, newEvent);

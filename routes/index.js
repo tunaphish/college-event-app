@@ -4,11 +4,22 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  var db = req.db;
-  //var universities = db.getUniversities(req,res);
-  //res.render('index.ejs',db.getUniversities(req,res));
-  res.sendFile(path.join(__dirname, '../views', 'index.html'));
-
+  var mysql = require('mysql');
+  var db = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: 'newpass',
+      database: 'siteDB'
+  });
+  db.connect(function(err) {
+    if (err) {
+      console.error('error connecting: ' + err.stack);
+      return;
+    }
+  });
+  db.query('SELECT * from university', function(err, rows) {
+    res.render('index.ejs', {universities: rows});
+  });
 });
 
 module.exports = router;
