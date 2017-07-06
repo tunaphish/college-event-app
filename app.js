@@ -33,8 +33,8 @@ app.get('/RSO/:id', db.RSO_details);
 app.get('/RSOs', db.RSO_list);
 app.get('/event/create', db.event_create_get);
 app.post('/event/create', db.event_create_post);
+app.get('/event/:id', db.event_details);
 app.get('/events', db.event_list);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

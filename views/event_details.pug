@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  - var event = events[0]
+  h1 #{title}: #{event.name}
+  
+  p #[strong Date:] #{event.date}
+  p #[strong Contact Phone:] #{event.contactPhone}
+  p #[strong Contact Email:] #{event.contactEmail}
+  p #[strong Type:] #{event.type}
+  p #[strong Scope:] #{event.Scope}
+  p #[strong Location:] #{event.location_locationID}
+  p #[strong Admin:] #{event.user_userID}
