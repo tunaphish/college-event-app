@@ -11,7 +11,7 @@ var router = express.Router();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -23,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //routing middleware
 app.use('/', require('./routes/index'));
 //http requests
+app.get('/', db.index);
 app.get('/user/create', db.user_create_get);
 app.post('/user/create', db.user_create_post);
 app.get('/user/:id', db.user_details);

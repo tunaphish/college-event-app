@@ -16,12 +16,13 @@ db.connect(function(err) {
   }
 });
 
+exports.index = (req,res) => event.index(req,res);
 exports.user_create_get = (req,res) => user.user_create_get(req,res,db);
 exports.user_create_post = (req,res) => user.user_create_post(req,res,db);
 exports.user_details = (req,res) => user.user_details(req,res,db);
 exports.RSO_create_get = (req,res) => rso.RSO_create_get(req,res,db);
 exports.RSO_create_post = (req,res) => rso.RSO_create_post(req,res,db);
-exports.RSO_list = (req,res) => RSO.RSO_list(req,res,db);
+exports.RSO_list = (req,res) => rso.RSO_list(req,res,db);
 exports.event_create_get = (req,res) => event.event_create_get(req,res,db);
 exports.event_create_post = (req,res) => event.event_create_post(req,res,db);
 exports.event_list = (req,res) => event.event_list(req,res,db);

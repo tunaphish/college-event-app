@@ -1,8 +1,8 @@
 var http = require('http');
 var mysql = require('mysql');
-var location = require('./location');
 
 let registerQuery = 'INSERT INTO event SET ?;';
+let rso_list_query = 'SELECT * FROM rso';
 
 exports.RSO_create_get = function(req, res, db) {
   res.send('NOT IMPLEMENTED: RSO create get');
@@ -22,5 +22,11 @@ exports.RSO_create_post = function(req, res, db) {
   res.redirect('/');
 }
 exports.RSO_list = function(req, res, db) {
-  res.send('NOT IMPLEMENTED: Get RSO List');
+  var query = mysql.format(rso_list_query);
+  console.log(query);
+  db.query(query, function(error, results, fields){
+      console.log(results);
+      res.render('rso_list',{title: 'Search RSOs','rso_list': results});
+  });
+  //res.send('NOT IMPLEMENTED: Get RSO List');
 }

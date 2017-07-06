@@ -4,6 +4,9 @@ var location = require('./location');
 
 let registerQuery = 'INSERT INTO event SET ?;';
 
+exports.index = function (req,res,db) {
+  res.send('NOT IMPLEMENTED: Home Page');
+}
 exports.event_create_get = function(req, res, db) {
   res.send('NOT IMPLEMENTED: Event create get');
 }
