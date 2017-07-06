@@ -4,7 +4,10 @@ var location = require('./location');
 
 let registerQuery = 'INSERT INTO event SET ?;';
 
-function addEvent(req, res, db) {
+exports.event_create_get = function(req, res, db) {
+  res.send('NOT IMPLEMENTED: Event create get');
+}
+exports.event_create_post = function (req, res, db) {
   var newEvent = {
     name: req.body.name,
     date: req.body.date,
@@ -23,4 +26,7 @@ function addEvent(req, res, db) {
   });
   res.redirect('/');
 }
-exports.addEvent = addEvent;
+
+exports.event_list = function(req, res, db) {
+  res.send('NOT IMPLEMENTED: Get Event List');
+}

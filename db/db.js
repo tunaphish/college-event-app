@@ -1,9 +1,7 @@
 var mysql = require('mysql');
 var user = require('./user');
 var event = require('./event');
-var location = require('./location');
 var rso = require('./rso');
-var university = require('./university');
 
 var db = mysql.createConnection({
     host: 'localhost',
@@ -18,8 +16,12 @@ db.connect(function(err) {
   }
 });
 
-exports.addUser = (req,res) => user.addUser(req,res,db);
-exports.addEvent = (req,res) => event.addEvent(req,res,db);
-exports.addLocation = (req,res) => location.addLocation(req,res,db);
-exports.addRSO = (req,res) => rso.addRSO(req,res,db);
-exports.getUniversities = (req,res) => university.getUniversities(req,res,db);
+exports.user_create_get = (req,res) => user.user_create_get(req,res,db);
+exports.user_create_post = (req,res) => user.user_create_post(req,res,db);
+exports.user_details = (req,res) => user.user_details(req,res,db);
+exports.RSO_create_get = (req,res) => rso.RSO_create_get(req,res,db);
+exports.RSO_create_post = (req,res) => rso.RSO_create_post(req,res,db);
+exports.RSO_list = (req,res) => RSO.RSO_list(req,res,db);
+exports.event_create_get = (req,res) => event.event_create_get(req,res,db);
+exports.event_create_post = (req,res) => event.event_create_post(req,res,db);
+exports.event_list = (req,res) => event.event_list(req,res,db);

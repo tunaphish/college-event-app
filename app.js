@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var db = require('./db/db');
 var app = express();
+var router = express.Router();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -20,16 +21,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //routing middleware
-app.use(function(req,res, next) {
-  req.db = db;
-  next();
-});
 app.use('/', require('./routes/index'));
-
 //http requests
-app.post('/registerUser', db.addUser);
-app.post('/registerEvent', db.addEvent);
-app.post('/registerRSO', db.addRSO);
+app.get('/user/create', db.user_create_get);
+app.post('/user/create', db.user_create_post);
+app.get('/user/:id', db.user_details);
+app.get('/RSO/create', db.RSO_create_get);
+app.post('/RSO/create', db.RSO_create_post);
+app.get('/RSOs', db.RSO_list);
+app.get('/event/create', db.event_create_get);
+app.post('/event/create', db.event_create_post);
+app.get('/events', db.event_list);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

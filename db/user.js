@@ -3,7 +3,10 @@ var mysql = require('mysql');
 
 let registerQuery = 'INSERT INTO user SET ?;';
 
-function addUser(req, res, db) {
+exports.user_create_get = function(req, res, db) {
+  res.send('NOT IMPLEMENTED: User create get');
+}
+exports.user_create_post = function(req, res, db) {
   var newUser = {
     emailAddress: req.body.email,
     password: req.body.password,
@@ -18,4 +21,6 @@ function addUser(req, res, db) {
   });
   res.redirect('/');
 }
-exports.addUser = addUser;
+exports.user_detail = function(req,res, db) {
+  res.send('NOT IMPLEMENTED: User Details')
+}

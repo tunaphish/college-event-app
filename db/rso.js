@@ -4,7 +4,10 @@ var location = require('./location');
 
 let registerQuery = 'INSERT INTO event SET ?;';
 
-function addRSO(req, res, db) {
+exports.RSO_create_get = function(req, res, db) {
+  res.send('NOT IMPLEMENTED: RSO create get');
+}
+exports.RSO_create_post = function(req, res, db) {
   var newEvent = {
     name: req.body.name,
     university_universityID: req.body.university,
@@ -18,4 +21,6 @@ function addRSO(req, res, db) {
   });
   res.redirect('/');
 }
-exports.addRSO = addRSO;
+exports.RSO_list = function(req, res, db) {
+  res.send('NOT IMPLEMENTED: Get RSO List');
+}
