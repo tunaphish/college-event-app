@@ -3,6 +3,7 @@ var mysql = require('mysql');
 var location = require('./location');
 
 let registerQuery = 'INSERT INTO event SET ?;';
+let event_list_query = 'SELECT * FROM event';
 
 exports.index = function (req,res,db) {
   res.send('NOT IMPLEMENTED: Home Page');
@@ -31,5 +32,8 @@ exports.event_create_post = function (req, res, db) {
 }
 
 exports.event_list = function(req, res, db) {
-  res.send('NOT IMPLEMENTED: Get Event List');
+  var query = mysql.format(event_list_query);
+  db.query(query, function(error, results, fields){
+      res.render('event_list',{title: 'Search Events','event_list': results});
+  });
 }

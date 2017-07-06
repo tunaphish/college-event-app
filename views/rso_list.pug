@@ -5,9 +5,10 @@ block content
   
   ul
   each rso in rso_list
-    li 
-      a(href='/') #{rso.name} 
+    - var url = '/RSO/' + rso.rsoID
+    li
+      a(href=url) #{rso.name} 
       | (#{rso.name})
 
   else
-    li There are no books.
+    li There are no RSOs.

@@ -1,3 +1,4 @@
 /node_modules
+/references
 config.js
 npm-debug.log
