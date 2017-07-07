@@ -38,7 +38,7 @@ exports.RSO_create_post = function(req, res, db) {
 exports.RSO_list = function(req, res, db) {
   var query = mysql.format(rso_list_query);
   db.query(query, function(error, results, fields){
-      res.render('rso_list',{title: 'Search RSOs','rso_list': results, });
+      res.render('rso_list',{title: 'RSO List','rso_list': results, });
   });
 }
 exports.RSO_details = function(req,res,db) {

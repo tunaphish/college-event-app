@@ -1,0 +1,91 @@
+extends layout
+
+block content
+  style.
+    #map {
+      width: 100%;
+      height: 500px;
+    }
+  h1 #{title}
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='name') Event Name:
+      input#name.form-control(type='text', placeholder='' name='name' autofocus required)
+    div.form-group
+      label(for='date') Date:
+      input#date.form-control(type='date', name='date', required)
+    div.form-group
+      label(for='contactPhone') Contact Phone:
+      input#contactPhone.form-control(type='text', placeholder='' name='contactPhone' required)
+    div.form-group
+      label(for='contactEmail') Contact Email:
+      input#contactEmail.form-control(type='text', placeholder='' name='contactEmail' required)
+    div.form-group
+      label(for='type') Event Type:
+      input#type.form-control(type='text', placeholder='' name='type' required)
+    div.form-group
+      label(for='scope') University:
+      select#scope.form-control(type='select', placeholder='' name='scope' required)
+        option(value='Public') Public
+        option(value='Private') Private
+        option(value='RSO Only') RSO Only
+    div.form-group
+      label(for='map') Location: 
+      input#locationName.form-control(type='text', placeholder='Select from Map' name='locationName' required readonly)
+      input#locationLat.form-control(type='hidden', placeholder='Select from Map' name='locationLat' )
+      input#locationLng.form-control(type='hidden', placeholder='Select from Map' name='locationLng' )
+      div#map
+
+    button.btn.btn-primary(type='submit') Submit
+    
+    script.
+      var map;
+      var marker;
+      var infowindow;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 28.6024274, lng: -81.200081},
+          zoom: 16
+        });
+        var geocoder = new google.maps.Geocoder;
+                
+        google.maps.event.addListener(map, 'click', function(event) {
+          placeMarker(event.latLng, map, geocoder);
+          document.getElementById('locationLat').value = event.latLng.lat();
+          document.getElementById('locationLng').value = event.latLng.lng();
+        });
+      }
+      function placeMarker(location, map, geocoder) {
+        if (!marker || !marker.setPosition) {
+              marker = new google.maps.Marker({
+              position: location,
+              map: map,
+            });
+        }
+        else {
+          marker.setPosition(location);
+        }
+        if (!!infowindow && !!infowindow.close) {
+          infowindow.close();
+        }
+            
+        geocoder.geocode({'location': location}, function(results, status) {
+        if (status === 'OK') {
+        if (results[1]) {
+          document.getElementById('locationName').value = results[0].formatted_address;
+        } else {
+          window.alert('No results found');
+        }
+        } else {
+        window.alert('Geocoder failed due to: ' + status);
+        }
+        });
+                
+        infowindow = new google.maps.InfoWindow({
+          content: 'Your location is ' + location
+        });
+        infowindow.open(map, marker);
+      }
+    
+    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyB1iCiABq4fSxOzuP5a3U_mQDBCA1EyMRM&callback=initMap')
