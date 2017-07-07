@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  - var user = users[0]
+  h1 #{title}: #{user.emailAddress}
+  
+  p #[strong Email:] #{user.date}
+  p #[strong Account Type:] #{user.type}
+  p #[strong University:] #{user.contactEmail}

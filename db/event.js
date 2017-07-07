@@ -1,11 +1,9 @@
 var http = require('http');
 var mysql = require('mysql');
-var location = require('./location');
 
 let registerQuery = 'INSERT INTO event SET ?;';
 let event_list_query = 'SELECT * FROM event';
 let event_detail_query = 'SELECT * FROM event WHERE eventID = ?;';
-
 
 exports.index = function (req,res,db) {
   res.send('NOT IMPLEMENTED: Home Page');
@@ -41,9 +39,7 @@ exports.event_list = function(req, res, db) {
 }
 exports.event_details = function(req,res,db) {
   var query = mysql.format(event_detail_query, [req.params.id]);
-  console.log(query);
   db.query(query, function(error, results, fields){
-      console.log(results);
       res.render('event_details',{title: 'Event','events': results});
   });
 }
