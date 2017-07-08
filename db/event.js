@@ -1,13 +1,14 @@
 var http = require('http');
 var mysql = require('mysql');
 var q = require('Q');
+var session = require('express-session');
 
 let event_create_query = 'INSERT INTO event SET ?;';
 let event_list_query = 'SELECT * FROM event';
 let event_detail_query = 'SELECT * FROM event WHERE eventID = ?;';
 
 exports.event_create_get = function(req, res, db) {
-  res.render('event_form', {title: 'Register Event!'});
+    (session.type === 'Admin') ? res.render('event_form', {title: 'Register Event!', authorized: 'authorized'}) : res.render('event_form', {title: 'Register Event!'});
 }
 exports.event_create_post = function (req, res, db) {
   function locationQuery() {
@@ -30,7 +31,7 @@ exports.event_create_post = function (req, res, db) {
       type: req.body.type,
       scope: req.body.scope,
       location_locationID: results[0][0].insertId,
-      user_userID: 1
+      rso_rsoID: 1
     }
     let query = mysql.format(event_create_query, newEvent);
     db.query(query, function(error, results, fields) {
