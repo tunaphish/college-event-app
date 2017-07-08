@@ -8,7 +8,14 @@ let event_list_query = 'SELECT * FROM event';
 let event_detail_query = 'SELECT * FROM event WHERE eventID = ?;';
 
 exports.event_create_get = function(req, res, db) {
-    (session.type === 'Admin') ? res.render('event_form', {title: 'Register Event!', authorized: 'authorized'}) : res.render('event_form', {title: 'Register Event!'});
+    db.query('SELECT * FROM rso', function(error, results, fields) {
+      console.log(error);
+      console.log(results);
+      console.log(fields);
+      (session.type === 'Admin') ?
+      res.render('event_form', {title: 'Register Event!', rsos: results, authorized: 'authorized'}) :
+      res.render('event_form', {title: 'Register Event!', rsos: results});
+    });
 }
 exports.event_create_post = function (req, res, db) {
   function locationQuery() {

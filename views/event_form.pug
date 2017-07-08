@@ -31,6 +31,12 @@ block content
           option(value='Private') Private
           option(value='RSO Only') RSO Only
       div.form-group
+        label(for='rso') RSO:
+        select#rso.form-control(type='select', placeholder='Events without RSO must get Super Admin approval' name='rso' required)
+          option(value=1) Events without RSO must get Super Admin approval
+          for rso in rsos
+              option(value=rso_rsoID) #{rso.name}
+      div.form-group
         label(for='map') Location: 
         input#locationName.form-control(type='text', placeholder='Select from Map' name='locationName' required readonly)
         input#locationLat.form-control(type='hidden', placeholder='Select from Map' name='locationLat' )
