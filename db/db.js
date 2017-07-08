@@ -29,3 +29,4 @@ exports.event_create_get = (req,res) => event.event_create_get(req,res,db);
 exports.event_create_post = (req,res) => event.event_create_post(req,res,db);
 exports.event_list = (req,res) => event.event_list(req,res,db);
 exports.event_details = (req,res) => event.event_details(req,res,db);
+exports.event_details_post = (req,res) => event.event_details_post(req,res,db);

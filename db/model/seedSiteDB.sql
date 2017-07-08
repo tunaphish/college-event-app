@@ -15,9 +15,9 @@ INSERT INTO rso(name, university_universityID, user_adminID) VALUES ('Kickboxing
 INSERT INTO event(name, date, contactPhone, contactEmail, type, scope, location_locationID, RSO_rsoID) 
 VALUES ('Fight Club 2017', '2017-12-12 12:00:00', '4078008000', 'admin@ucf.edu', 'Athletic','Public', 1, 1);
 
-INSERT INTO comment(content, user_userID, event_eventID) VALUES('THIS IS AWESOME!!!', 1, 1);
-INSERT INTO comment(content, user_userID, event_eventID) VALUES('Can not wait.', 2, 1);
-INSERT INTO comment(content, user_userID, event_eventID) VALUES('This event seems a little violent', 3, 1);
+INSERT INTO comment(content, user_userID, event_eventID,name) VALUES('THIS IS AWESOME!!!', 1, 1, 'Tuan Pham');
+INSERT INTO comment(content, user_userID, event_eventID,name) VALUES('Can not wait.', 2, 1, 'Regular Admin');
+INSERT INTO comment(content, user_userID, event_eventID,name) VALUES('This event seems a little violent', 3, 1,'Super Admin');
 
 INSERT INTO students_rso(user_userID, RSO_rsoID) VALUES(1,1);
 INSERT INTO students_rso(user_userID, RSO_rsoID) VALUES(2,1);

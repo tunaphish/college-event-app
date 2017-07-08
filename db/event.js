@@ -64,12 +64,30 @@ exports.event_details = function(req,res,db) {
     return defered.promise;
   }
   q.all([eventQuery()]).then(function(results){
-    let query = mysql.format('SELECT * FROM location WHERE locationID = ?;', [results[0][0][0].location_locationID]);
+    let query = mysql.format('SELECT * FROM comment WHERE event_eventID = ?;', [results[0][0][0].eventID]);
     db.query(query, function(error, results2, fields) {
         console.log(error);
         console.log(results2);
         console.log(fields);
-        res.render('event_details', {title: 'Event', 'events': results[0][0], location: results2[0]});
+        session.id ?
+        res.render('event_details', {title: 'Event', 'event': results[0][0][0], comments: results2}) :
+        res.render('event_details', {title: 'Event', 'event': results[0][0][0], comments: results2, error: 'error'});
     });
   });
+
+  exports.event_details_post = function(req,res,db) {
+    var newComment = {
+      name: session.fullname,
+      content: req.body.newcomment,
+      event_eventID: req.params.id,
+      user_userID: session.id
+    }
+    var query = mysql.format('INSERT INTO comment SET ?;', newComment);
+    db.query(query, function(error,results,fields) {
+      console.log(error);
+      console.log(results);
+      console.log(fields);
+      exports.event_details(req,res,db);
+    });
+  };
 }

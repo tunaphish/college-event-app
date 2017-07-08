@@ -1,12 +1,14 @@
 var http = require('http');
 var mysql = require('mysql');
 var q = require('Q');
+var session = require('express-session');
 
 let rso_create_query = 'INSERT INTO rso SET ?;';
 let rso_list_query = 'SELECT * FROM rso';
 let rso_detail_query = 'SELECT * FROM rso WHERE rsoID = ?;';
 
 exports.RSO_create_get = function(req, res, db) {
+  if (!session.id) res.render('rso_form', {error: 'Please login to create RSO!'});
   function universityQuery() {
     var defered = q.defer();
     db.query('SELECT * from university;', defered.makeNodeResolver());
@@ -18,7 +20,7 @@ exports.RSO_create_get = function(req, res, db) {
     return defered.promise;
   }
   q.all([universityQuery(),userQuery()]).then(function(results){
-        res.render('rso_form', {title: 'Register RSO!', universities: results[0][0], users: results[1][0]});
+        res.render('rso_form', {title: 'Register RSO!', universities: results[0][0], userID: session.id, name: session.fullname});
   });
 }
 exports.RSO_create_post = function(req, res, db) {

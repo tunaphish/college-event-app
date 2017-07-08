@@ -1,7 +1,6 @@
 extends layout
 
 block content
-  - var event = events[0]
   h1 #{title}: #{event.name}
   
   p #[strong Date:] #{event.date}
@@ -9,4 +8,19 @@ block content
   p #[strong Contact Email:] #{event.contactEmail}
   p #[strong Type:] #{event.type}
   p #[strong Scope:] #{event.scope}
-  p #[strong Location:] #{location.name}
+  
+  hr
+  h1= 'Comments'
+
+  if comments
+    each comment in comments
+      p #{comment.name} - #{comment.content}
+  
+  form(method='POST' action='')
+    div.form-group
+      label(for='newcomment') Add Comment:
+      if error
+        p Please login to add a comment!
+      else
+        input#newcomment.form-control.input-lg(size=6 type='text', placeholder='' name='newcomment' autofocus required)
+        button.btn.btn-primary(type='submit') Submit

@@ -2,7 +2,10 @@ extends layout
 
 block content
   h1 #{title}
-
+  
+  if error 
+    h1= error
+  
   form(method='POST' action='')
     div.form-group
       label(for='email') E-mail:
@@ -11,6 +14,3 @@ block content
       input#password.form-control(type='text', placeholder='' name='password' required)
       div.form-group
     button.btn.btn-primary(type='submit') Submit
-
-    if error 
-      li!= error

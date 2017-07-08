@@ -15,6 +15,7 @@ exports.user_login_post = function(req,res,db) {
     console.log(results);
     console.log(fields);
     if (results[0] && results[0].password === req.body.password) {
+      session.id = results[0].userID;
       session.emailAddress = results[0].emailAddress;
       session.type = results[0].type;
       session.fullname = results[0].firstname + ' ' + results[0].lastname;

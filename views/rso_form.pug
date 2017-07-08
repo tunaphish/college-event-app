@@ -2,20 +2,22 @@ extends layout
 
 block content
   h1 #{title}
+  
+  if error
+    h1= error
+  else
+    form(method='POST' action='')
+      div.form-group
+        label(for='name') RSO Name:
+        input#name.form-control(type='text', placeholder='' name='name' autofocus required)
+      div.form-group
+        label(for='university') University:
+        select#university.form-control(type='select', placeholder='' name='university' required)
+          for university in universities
+              option(value=university.universityID) #{university.name}
+      div.form-group
+        label(for='admin') Admin:
+        select#admin.form-control(type='select', placeholder='' name='admin' readonly)
+          option(value=userID) #{name}
 
-  form(method='POST' action='')
-    div.form-group
-      label(for='name') RSO Name:
-      input#name.form-control(type='text', placeholder='' name='name' autofocus required)
-    div.form-group
-      label(for='university') University:
-      select#university.form-control(type='select', placeholder='' name='university' required)
-        for university in universities
-            option(value=university.universityID) #{university.name}
-    div.form-group
-      label(for='admin') Admin:
-      select#admin.form-control(type='select', placeholder='' name='admin' required)
-        for user in users
-            option(value=user.userID) #{user.emailAddress}
-
-    button.btn.btn-primary(type='submit') Submit
+      button.btn.btn-primary(type='submit') Submit
