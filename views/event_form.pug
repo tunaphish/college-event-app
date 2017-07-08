@@ -25,7 +25,7 @@ block content
       label(for='type') Event Type:
       input#type.form-control(type='text', placeholder='' name='type' required)
     div.form-group
-      label(for='scope') University:
+      label(for='scope') Scope:
       select#scope.form-control(type='select', placeholder='' name='scope' required)
         option(value='Public') Public
         option(value='Private') Private
@@ -66,9 +66,6 @@ block content
         else {
           marker.setPosition(location);
         }
-        if (!!infowindow && !!infowindow.close) {
-          infowindow.close();
-        }
             
         geocoder.geocode({'location': location}, function(results, status) {
         if (status === 'OK') {
@@ -81,11 +78,6 @@ block content
         window.alert('Geocoder failed due to: ' + status);
         }
         });
-                
-        infowindow = new google.maps.InfoWindow({
-          content: 'Your location is ' + location
-        });
-        infowindow.open(map, marker);
       }
     
     script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyB1iCiABq4fSxOzuP5a3U_mQDBCA1EyMRM&callback=initMap')

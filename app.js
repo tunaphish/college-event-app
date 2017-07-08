@@ -23,7 +23,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //routing middleware
 app.use('/', require('./routes/index'));
 //http requests
-app.get('/', db.index);
+app.get('/user/login', db.user_login_get);
+app.post('/user/login', db.user_login_post);
 app.get('/user/create', db.user_create_get);
 app.post('/user/create', db.user_create_post);
 app.get('/user/:id', db.user_details);

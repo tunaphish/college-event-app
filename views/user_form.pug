@@ -5,9 +5,18 @@ block content
 
   form(method='POST' action='')
     div.form-group
+      label(for='firstname') First Name:
+      input#firstname.form-control(type='text', placeholder='' name='firstname' autofocus required)
+      label(for='lastname') E-mail:
+      input#lastname.form-control(type='text', placeholder='' name='lastname'  required)
       label(for='email') E-mail:
-      input#email.form-control(type='text', placeholder='something@email.edu' name='email' autofocus required)
+      input#email.form-control(type='text', placeholder='' name='email'  required)
       label(for='password') Password:
       input#password.form-control(type='text', placeholder='' name='password' required)
+      div.form-group
+        label(for='university') University:
+        select#university.form-control(type='select', placeholder='' name='university' required)
+          for university in universities
+              option(value=university.universityID) #{university.name}
 
     button.btn.btn-primary(type='submit') Submit

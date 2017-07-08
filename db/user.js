@@ -1,24 +1,47 @@
 var http = require('http');
 var mysql = require('mysql');
+var session = require('express-session');
 
 let user_create_query = 'INSERT INTO user SET ?;';
 let user_detail_query = 'SELECT * FROM user WHERE userID = ?;';
 
+exports.user_login_get = function(req,res,db) {
+  res.render('user_login', {title: 'Login'});
+}
+exports.user_login_post = function(req,res,db) {
+  var query = mysql.format('SELECT * FROM user WHERE emailAddress = ?;', req.body.email);
+  db.query(query, function(error, results, fields) {
+    console.log(error);
+    console.log(results);
+    console.log(fields);
+    if (results[0] && results[0].password === req.body.password) {
+      session.emailAddress = results[0].emailAddress;
+      session.type = results[0].type;
+      session.fullname = results[0].firstname + ' ' + results[0].lastname;
+      res.render('index', {title: 'Welcome ' + session.fullname});
+    }
+    else {
+      res.render('user_login', {error: 'E-mail not found or password incorrect!'});
+    }
+  });
+}
+
 exports.user_create_get = function(req, res, db) {
-  res.render('user_form', {title: 'Sign up!'})
+  db.query('SELECT * FROM university', function(error, results, fields) {
+    console.log(error);
+    console.log(results);
+    console.log(fields);
+    res.render('user_form', {title: 'Sign up!', universities: results});
+  });
 }
 exports.user_create_post = function(req, res, db) {
-  //Validate & Sanitize
-  //Run validator
-  //Create object w/ data
-  //Check for errors and reload page with data
-  //Check if User exists
-  //Redirect to user details page u
   var newUser = {
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
     emailAddress: req.body.email,
     password: req.body.password,
     type: 'Student',
-    university_universityID: 1
+    university_universityID: req.body.university
   }
   let query = mysql.format(user_create_query, newUser);
   db.query(query, function(error, results, fields) {

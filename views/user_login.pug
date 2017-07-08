@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 #{title}
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='email') E-mail:
+      input#email.form-control(type='text', placeholder='something@email.edu' name='email' autofocus required)
+      label(for='password') Password:
+      input#password.form-control(type='text', placeholder='' name='password' required)
+      div.form-group
+    button.btn.btn-primary(type='submit') Submit
+
+    if error 
+      li!= error
