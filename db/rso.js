@@ -5,7 +5,7 @@ var session = require('express-session');
 
 let rso_create_query = 'INSERT INTO rso SET ?;';
 let rso_list_query = 'SELECT * FROM rso';
-let rso_detail_query = 'SELECT * FROM rso WHERE rsoID = ?;';
+let rso_detail_query = 'SELECT * FROM rso,students_rso WHERE rsoID = ?;';
 
 exports.RSO_create_get = function(req, res, db) {
   if (!session.id) res.render('rso_form', {error: 'Please login to create RSO!'});
@@ -24,12 +24,13 @@ exports.RSO_create_get = function(req, res, db) {
   });
 }
 exports.RSO_create_post = function(req, res, db) {
-  var newEvent = {
+  var newRSO = {
     name: req.body.name,
+    active: 'inactive',
     university_universityID: req.body.university,
-    user_adminID: req.body.admin
+    user_adminID: req.body.admins
   }
-  let query = mysql.format(rso_create_query, newEvent);
+  let query = mysql.format(rso_create_query, newRSO);
   db.query(query, function(error, results, fields) {
       console.log(error);
       console.log(results);
@@ -45,9 +46,33 @@ exports.RSO_list = function(req, res, db) {
 }
 exports.RSO_details = function(req,res,db) {
   var query = mysql.format(rso_detail_query, [req.params.id]);
-  console.log(query);
   db.query(query, function(error, results, fields){
       console.log(results);
-      res.render('rso_details',{title: 'RSO','rso': results});
+      var rendered = false;
+      if (!session.id) {
+        res.render('rso_details',{title: 'RSO',rso: results, error: 'Please login to join an RSO'});
+        rendered = true;
+      }
+      else {
+        for (var i in results) {
+          if (results[i].user_userID === session.id) {
+            res.render('rso_details', {title: 'RSO', rso:results, error: 'You are a member of this RSO'});
+            rendered = true;
+            break;
+          }
+        }
+      }
+      if (!rendered) res.render('rso_details',{title: 'RSO',rso: results});
   });
+}
+exports.RSO_details_post = function(req,res,db) {
+  var member = {
+    user_userID: session.id,
+    RSO_rsoID: req.params.id
+  }
+  var query = mysql.format('INSERT INTO students_rso set ?;', member);
+  db.query(query, function(error, results, fields) {
+    console.log(results);
+    exports.RSO_details(req,res,db);
+  })
 }

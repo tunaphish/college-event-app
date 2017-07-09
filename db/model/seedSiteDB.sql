@@ -10,7 +10,7 @@ INSERT INTO user(emailAddress, password, type, university_universityID, firstnam
 INSERT INTO user(emailAddress, password, type, university_universityID, firstname, lastname) VALUES ('admin@ucf.edu', 'asdf', 'Admin', 1, 'Regular', 'Admin');
 INSERT INTO user(emailAddress, password, type, university_universityID, firstname, lastname) VALUES ('super@ucf.edu', 'asdf', 'Super Admin', 1, 'Super', 'Admin');
 
-INSERT INTO rso(name, university_universityID, user_adminID) VALUES ('Kickboxing Club', 1,2);
+INSERT INTO rso(name, university_universityID, user_adminID,active) VALUES ('Kickboxing Club', 1,2,'inactive');
 
 INSERT INTO event(name, date, contactPhone, contactEmail, type, scope, location_locationID, RSO_rsoID) 
 VALUES ('Fight Club 2017', '2017-12-12 12:00:00', '4078008000', 'admin@ucf.edu', 'Athletic','Public', 1, 1);

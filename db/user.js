@@ -28,10 +28,8 @@ exports.user_login_post = function(req,res,db) {
 }
 
 exports.user_create_get = function(req, res, db) {
+  console.log(db.query('SELECT * FROM university'));
   db.query('SELECT * FROM university', function(error, results, fields) {
-    console.log(error);
-    console.log(results);
-    console.log(fields);
     res.render('user_form', {title: 'Sign up!', universities: results});
   });
 }

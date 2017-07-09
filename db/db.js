@@ -25,6 +25,7 @@ exports.RSO_create_get = (req,res) => rso.RSO_create_get(req,res,db);
 exports.RSO_create_post = (req,res) => rso.RSO_create_post(req,res,db);
 exports.RSO_list = (req,res) => rso.RSO_list(req,res,db);
 exports.RSO_details = (req,res) => rso.RSO_details(req,res,db);
+exports.RSO_details_post = (req,res) => rso.RSO_details_post(req,res,db);
 exports.event_create_get = (req,res) => event.event_create_get(req,res,db);
 exports.event_create_post = (req,res) => event.event_create_post(req,res,db);
 exports.event_list = (req,res) => event.event_list(req,res,db);

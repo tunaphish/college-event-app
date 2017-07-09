@@ -2,7 +2,7 @@ extends layout
 
 block content
   - var user = users[0]
-  h1 #{title}: #{user.firstname} ' ' #{user.lastname}
+  h1 #{title}: #{user.firstname}  #{user.lastname}
 
   p #[strong Email:] #{user.emailAddress}
   p #[strong Account Type:] #{user.type}
