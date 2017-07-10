@@ -2,4 +2,11 @@ extends layout
 
 block content
   h1= title 
-  p Welcome to #[em College Event Site]!
+  h3 Please view our public events!
+  
+  each event in event_list
+    - var url = '/event/' + event.eventID
+    li 
+      a(href=url) #{event.name}  - #{event.date}
+  else
+    li There are no events.

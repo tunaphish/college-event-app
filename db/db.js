@@ -18,6 +18,7 @@ db.connect(function(err) {
   }
 });
 
+exports.index = (req,res) => event.index(req,res,db);
 exports.user_login_get = (req,res) => user.user_login_get(req,res,db);
 exports.user_login_post = (req,res) => user.user_login_post(req,res,db);
 exports.user_create_get = (req,res) => user.user_create_get(req,res,db);

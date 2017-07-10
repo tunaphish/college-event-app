@@ -4,9 +4,18 @@ var q = require('Q');
 var session = require('express-session');
 
 let event_create_query = 'INSERT INTO event SET ?;';
-let event_list_query = 'SELECT * FROM event';
+let public_event_list_query = 'SELECT * FROM event WHERE scope = "Public" ORDER BY date';
+let event_list_query = 'SELECT * FROM event;';
 let event_detail_query = 'SELECT * FROM event WHERE eventID = ?;';
 
+exports.index = function(req,res,db) {
+  var query = mysql.format(public_event_list_query);
+  db.query(query, function(error, results, fields){
+      var user = 'Guest'
+      if (session.fullname) user = session.fullname;
+      res.render('index', {title: 'Welcome ' + user,'event_list': results});
+  });
+}
 exports.event_create_get = function(req, res, db) {
     db.query('SELECT * FROM rso', function(error, results, fields) {
       console.log(error);
@@ -56,7 +65,26 @@ exports.event_list = function(req, res, db) {
   });
 }
 exports.event_details = function(req,res,db) {
-    let query = mysql.format('SELECT * FROM event,comment,user WHERE event_eventID = ? AND user_userID = userID;', [req.params.id]);
+    function eventQuery() {
+      var defered = q.defer();
+      let query = mysql.format('SELECT * FROM event WHERE eventID = ?;', [req.params.id]);
+      db.query(query, defered.makeNodeResolver());
+      return defered.promise;
+    }
+    q.all([eventQuery()]).then(function(results){
+      console.log(results[0][0][0]);
+      let query = mysql.format('SELECT * FROM comment WHERE event_eventID = ?;', [results[0][0][0].eventID]);
+      console.log(query);
+      db.query(query, function(error, results2, fields) {
+          console.log(error);
+          console.log(results2);
+          session.id ?
+          res.render('event_details', {title: 'Event', 'event': results[0][0][0], comments: results2}) :
+          res.render('event_details', {title: 'Event', 'event': results[0][0][0], comments: results2, error: 'error'});
+      });
+    });
+    /*
+    let query = mysql.format('SELECT * FROM event,comment,user WHERE eventID = ? AND user_userID = userID AND event_eventID = eventID;', [req.params.id]);
     session.prevEvent = '/event/' + req.params.id;
     db.query(query, function(error, results, fields) {
         console.log(error);
@@ -65,6 +93,7 @@ exports.event_details = function(req,res,db) {
         res.render('event_details', {title: 'Event', 'event': results[0], comments: results}) :
         res.render('event_details', {title: 'Event', 'event': results[0], comments: results, error: 'error'});
     });
+    */
 };
 exports.event_details_post = function(req,res,db) {
   var newComment = {

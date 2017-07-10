@@ -19,7 +19,7 @@ exports.user_login_post = function(req,res,db) {
       session.emailAddress = results[0].emailAddress;
       session.type = results[0].type;
       session.fullname = results[0].firstname + ' ' + results[0].lastname;
-      res.render('index', {title: 'Welcome ' + session.fullname});
+      res.redirect('/');
     }
     else {
       res.render('user_login', {error: 'E-mail not found or password incorrect!'});
