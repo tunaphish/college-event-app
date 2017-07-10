@@ -49,7 +49,6 @@ exports.event_create_post = function (req, res, db) {
     });
   });
 }
-
 exports.event_list = function(req, res, db) {
   var query = mysql.format(event_list_query);
   db.query(query, function(error, results, fields){
@@ -57,37 +56,26 @@ exports.event_list = function(req, res, db) {
   });
 }
 exports.event_details = function(req,res,db) {
-  function eventQuery() {
-    var defered = q.defer();
-    var query = mysql.format(event_detail_query, [req.params.id]);
-    db.query(query, defered.makeNodeResolver());
-    return defered.promise;
-  }
-  q.all([eventQuery()]).then(function(results){
-    let query = mysql.format('SELECT * FROM comment WHERE event_eventID = ?;', [results[0][0][0].eventID]);
-    db.query(query, function(error, results2, fields) {
+    let query = mysql.format('SELECT * FROM event,comment,user WHERE event_eventID = ? AND user_userID = userID;', [req.params.id]);
+    db.query(query, function(error, results, fields) {
         console.log(error);
-        console.log(results2);
-        console.log(fields);
+        console.log(results);
         session.id ?
-        res.render('event_details', {title: 'Event', 'event': results[0][0][0], comments: results2}) :
-        res.render('event_details', {title: 'Event', 'event': results[0][0][0], comments: results2, error: 'error'});
+        res.render('event_details', {title: 'Event', 'event': results[0], comments: results}) :
+        res.render('event_details', {title: 'Event', 'event': results[0], comments: results, error: 'error'});
     });
+};
+exports.event_details_post = function(req,res,db) {
+  var newComment = {
+    content: req.body.newcomment,
+    event_eventID: req.params.id,
+    user_userID: session.id
+  }
+  var query = mysql.format('INSERT INTO comment SET ?;', newComment);
+  db.query(query, function(error,results,fields) {
+    console.log(error);
+    console.log(results);
+    console.log(fields);
+    exports.event_details(req,res,db);
   });
-
-  exports.event_details_post = function(req,res,db) {
-    var newComment = {
-      name: session.fullname,
-      content: req.body.newcomment,
-      event_eventID: req.params.id,
-      user_userID: session.id
-    }
-    var query = mysql.format('INSERT INTO comment SET ?;', newComment);
-    db.query(query, function(error,results,fields) {
-      console.log(error);
-      console.log(results);
-      console.log(fields);
-      exports.event_details(req,res,db);
-    });
-  };
-}
+};
