@@ -1,0 +1,69 @@
+extends layout
+
+block content
+  h1 #{title}
+  style.
+    #map {
+      width: 100%;
+      height: 500px;
+    }
+  if error
+    h1= error
+  else
+    form(method='POST' action='')
+      div.form-group
+        label(for='name') University Name:
+        input#name.form-control(type='text', placeholder='' name='name' autofocus required)
+      div.form-group
+        label(for='numStudents') Number of Students:
+        input#numStudents.form-control(type='number', placeholder='' name='numStudents' autofocus required)
+      div.form-group
+        label(for='map') Location: 
+        input#locationName.form-control(type='text', placeholder='Select from Map' name='locationName' required readonly)
+        input#locationLat.form-control(type='hidden', placeholder='Select from Map' name='locationLat' )
+        input#locationLng.form-control(type='hidden', placeholder='Select from Map' name='locationLng' )
+        div#map
+      button.btn.btn-primary(type='submit') Submit
+      
+  script.
+    var map;
+    var marker;
+    var infowindow;
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 42.359346, lng: -71.093076},
+        zoom: 16
+      });
+      var geocoder = new google.maps.Geocoder;
+              
+      google.maps.event.addListener(map, 'click', function(event) {
+        placeMarker(event.latLng, map, geocoder);
+        document.getElementById('locationLat').value = event.latLng.lat();
+        document.getElementById('locationLng').value = event.latLng.lng();
+      });
+    }
+    function placeMarker(location, map, geocoder) {
+      if (!marker || !marker.setPosition) {
+            marker = new google.maps.Marker({
+            position: location,
+            map: map,
+          });
+      }
+      else {
+        marker.setPosition(location);
+      }
+          
+      geocoder.geocode({'location': location}, function(results, status) {
+      if (status === 'OK') {
+      if (results[1]) {
+        document.getElementById('locationName').value = results[0].formatted_address;
+      } else {
+        window.alert('No results found');
+      }
+      } else {
+      window.alert('Geocoder failed due to: ' + status);
+      }
+      });
+    }
+  
+  script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyB1iCiABq4fSxOzuP5a3U_mQDBCA1EyMRM&callback=initMap')

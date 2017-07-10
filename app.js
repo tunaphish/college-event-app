@@ -39,7 +39,10 @@ app.get('/event/:id', db.event_details);
 app.post('/event/:id', db.event_details_post);
 app.get('/events', db.event_list);
 app.get('/comment/:id', db.comment_details);
-app.post('/comment/:id', db.comment_details_post)
+app.post('/comment/:id', db.comment_details_post);
+app.get('/university/create', db.university_create_get);
+app.post('/university/create', db.university_create_post);
+app.get('/university/:id', db.university_details);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -3,6 +3,7 @@ var user = require('./user');
 var event = require('./event');
 var rso = require('./rso');
 var comment = require('./comment');
+var university = require('./university');
 
 var db = mysql.createConnection({
     host: 'localhost',
@@ -34,3 +35,6 @@ exports.event_details = (req,res) => event.event_details(req,res,db);
 exports.event_details_post = (req,res) => event.event_details_post(req,res,db);
 exports.comment_details = (req,res) => comment.comment_details(req,res,db);
 exports.comment_details_post = (req,res) => comment.comment_details_post(req,res,db);
+exports.university_create_get = (req,res) => university.university_create_get(req,res,db);
+exports.university_create_post = (req,res) => university.university_create_post(req,res,db);
+exports.university_details = (req,res) => university.university_details(req,res,db);
