@@ -57,6 +57,7 @@ exports.event_list = function(req, res, db) {
 }
 exports.event_details = function(req,res,db) {
     let query = mysql.format('SELECT * FROM event,comment,user WHERE event_eventID = ? AND user_userID = userID;', [req.params.id]);
+    session.prevEvent = '/event/' + req.params.id;
     db.query(query, function(error, results, fields) {
         console.log(error);
         console.log(results);

@@ -2,6 +2,7 @@ var mysql = require('mysql');
 var user = require('./user');
 var event = require('./event');
 var rso = require('./rso');
+var comment = require('./comment');
 
 var db = mysql.createConnection({
     host: 'localhost',
@@ -31,3 +32,5 @@ exports.event_create_post = (req,res) => event.event_create_post(req,res,db);
 exports.event_list = (req,res) => event.event_list(req,res,db);
 exports.event_details = (req,res) => event.event_details(req,res,db);
 exports.event_details_post = (req,res) => event.event_details_post(req,res,db);
+exports.comment_details = (req,res) => comment.comment_details(req,res,db);
+exports.comment_details_post = (req,res) => comment.comment_details_post(req,res,db);

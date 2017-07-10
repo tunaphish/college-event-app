@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1 User: #{comment.firstname} #{comment.lastname}
+    
+  if authorized
+    form(method='POST' action='')
+      div.form-group
+        label(for='content') Comment Content:
+        input#content.form-control(type='text', value=comment.content name='content' autofocus required)
+      button.btn.btn-primary(type='submit' name='button' value='submit') Submit 
+      button.btn.btn-primary(type='submit' name='button' value='delete') Delete
+
+  else
+    p #[strong Comment:] #{comment.content}
