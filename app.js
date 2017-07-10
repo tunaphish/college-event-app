@@ -36,6 +36,8 @@ app.post('/RSO/:id', db.RSO_details_post);
 app.get('/RSOs', db.RSO_list);
 app.get('/event/create', db.event_create_get);
 app.post('/event/create', db.event_create_post);
+app.get('/event/search', db.event_search_get);
+app.post('/event/search', db.event_search_post);
 app.get('/event/:id', db.event_details);
 app.post('/event/:id', db.event_details_post);
 app.get('/events', db.event_list);

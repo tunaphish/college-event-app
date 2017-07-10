@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  h1 Search Events!
+  
+  if error
+    h1= error
+  else
+    form(method='POST' action='')
+      div.form-group
+        label(for='location') Location:
+        select#location.form-control(type='select', placeholder='' name='location' )
+          option(value='')
+          for location in locations
+              option(value=location.locationID) #{location.name}
+      div.form-group
+        label(for='scope') Scope:
+        select#scope.form-control(type='select', placeholder='' name='scope' )
+              option(value='')
+              option(value='Public') Public
+              option(value='Private') Private
+              option(value='RSO Only') RSO Only
+      div.form-group
+        label(for='rso') RSO:
+        select#rso.form-control(type='select', placeholder='' name='rso' )
+          option(value='')
+          for rso in rsos
+              option(value=rso.rsoID) #{rso.name}
+      button.btn.btn-primary(type='submit') Filter
