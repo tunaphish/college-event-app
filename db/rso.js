@@ -4,7 +4,7 @@ var q = require('Q');
 var session = require('express-session');
 
 let rso_create_query = 'INSERT INTO rso SET ?;';
-let rso_list_query = 'SELECT * FROM rso';
+let rso_list_query = 'SELECT r.name as rsoName, r.active as active, u.name as uniName FROM rso r, university u WHERE u.universityID = r.university_universityID';
 let rso_detail_query = 'SELECT * FROM rso,students_rso WHERE rsoID = ?;';
 
 exports.RSO_create_get = function(req, res, db) {

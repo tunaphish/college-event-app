@@ -7,7 +7,7 @@ block content
   each rso in rso_list
     - var url = '/RSO/' + rso.rsoID
     li
-      a(href=url) #{rso.name} - #{rso.active}
+      a(href=url) #{rso.rsoName} - #{rso.uniName} - #{rso.active} 
 
   else
     li There are no RSOs.
