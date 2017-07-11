@@ -5,7 +5,7 @@ var session = require('express-session');
 
 let rso_create_query = 'INSERT INTO rso SET ?;';
 let rso_list_query = 'SELECT r.rsoID as rsoID, r.name as rsoName, r.active as active, u.name as uniName FROM rso r, university u WHERE u.universityID = r.university_universityID';
-let rso_detail_query = 'SELECT * FROM rso,students_rso WHERE rsoID = ?;';
+let rso_detail_query = 'SELECT *, u.name as uniName, r.name as name FROM rso r,students_rso s,university u WHERE r.rsoID = ? AND u.universityID = r.university_universityID;';
 
 exports.RSO_create_get = function(req, res, db) {
   if (!session.id) res.render('rso_form', {error: 'Please login to create RSO!'});
@@ -30,7 +30,7 @@ exports.RSO_create_post = function(req, res, db) {
     name: req.body.name,
     active: 'inactive',
     university_universityID: req.body.university,
-    user_adminID: req.body.admins
+    user_adminID: req.body.admin
   }
   let query = mysql.format(rso_create_query, newRSO);
   db.query(query, function(error, results, fields) {
