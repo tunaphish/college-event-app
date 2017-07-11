@@ -47,7 +47,7 @@ exports.event_create_post = function (req, res, db) {
       type: req.body.type,
       scope: req.body.scope,
       location_locationID: results[0][0].insertId,
-      rso_rsoID: 1
+      rso_rsoID: req.body.rso
     }
     let query = mysql.format(event_create_query, newEvent);
     db.query(query, function(error, results, fields) {
@@ -67,13 +67,13 @@ exports.event_list = function(req, res, db) {
 exports.event_details = function(req,res,db) {
     function eventQuery() {
       var defered = q.defer();
-      let query = mysql.format('SELECT * FROM event WHERE eventID = ?;', [req.params.id]);
+      let query = mysql.format('SELECT *,e.name as eventName, r.name as rsoName, l.name as locName FROM event e, rso r, location l WHERE eventID = ? AND e.rso_rsoID = r.rsoID AND e.location_locationID = l.locationID;', [req.params.id]);
       db.query(query, defered.makeNodeResolver());
       return defered.promise;
     }
     q.all([eventQuery()]).then(function(results){
       console.log(results[0][0][0]);
-      let query = mysql.format('SELECT * FROM comment WHERE event_eventID = ?;', [results[0][0][0].eventID]);
+      let query = mysql.format('SELECT * FROM comment,user WHERE event_eventID = ? AND userID = user_userID;', [results[0][0][0].eventID]);
       console.log(query);
       db.query(query, function(error, results2, fields) {
           console.log(error);

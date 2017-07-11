@@ -1,13 +1,16 @@
 extends layout
 
 block content
-  h1 #{title}: #{event.name}
+  h1 #{title}: #{event.eventName}
   
   p #[strong Date:] #{event.date}
   p #[strong Contact Phone:] #{event.contactPhone}
   p #[strong Contact Email:] #{event.contactEmail}
   p #[strong Type:] #{event.type}
   p #[strong Scope:] #{event.scope}
+  p #[strong Location:] #{event.locName}
+  p #[strong RSO:] #{event.rsoName}
+
   
   hr
   h1= 'Comments'
