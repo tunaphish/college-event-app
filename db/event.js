@@ -18,20 +18,22 @@ exports.index = function(req,res,db) {
 }
 exports.event_create_get = function(req, res, db) {
     db.query('SELECT * FROM rso', function(error, results, fields) {
-      console.log(error);
-      console.log(results);
-      console.log(fields);
       (session.type === 'Admin') ?
       res.render('event_form', {title: 'Register Event!', rsos: results, authorized: 'authorized'}) :
       res.render('event_form', {title: 'Register Event!', rsos: results});
     });
 }
 exports.event_create_post = function (req, res, db) {
-  db.query(mysql.format('SELECT user_adminID from rso where rsoID = ?;', [req.body.rso]), function(error,results,fields) {
-    console.log(error);
-    console.log(results);
-    if (session.id !== results[0].user_adminID) res.redirect('/');
-  });
+  function checkAdmin() {
+    var defered = q.defer();
+    db.query(mysql.format('SELECT user_adminID from rso where rsoID = ?;', [req.body.rso]), defered.makeNodeResolver());
+    return defered.promise;
+  }
+  function checkConflicting() {
+    var defered = q.defer();
+    db.query(mysql.format('SELECT l.name as name, e.date as date from event e, location l where e.location_locationID= ?;', [req.body.location]), defered.makeNodeResolver());
+    return defered.promise;
+  }
   function locationQuery() {
     var defered = q.defer();
     var newLocation = {
@@ -43,24 +45,30 @@ exports.event_create_post = function (req, res, db) {
     db.query(query, defered.makeNodeResolver());
     return defered.promise;
   }
-  q.all([locationQuery()]).then(function(results){
-    var newEvent = {
-      name: req.body.name,
-      date: req.body.date,
-      contactPhone: req.body.contactPhone,
-      contactEmail: req.body.contactEmail,
-      type: req.body.type,
-      scope: req.body.scope,
-      location_locationID: results[0][0].insertId,
-      rso_rsoID: req.body.rso
+  q.all([locationQuery(),checkAdmin()]).then(function(results){
+    console.log(results[1][0][0]);
+    console.log(results[1][0][0].user_adminID);
+    if (session.id !== results[1][0][0].user_adminID) {
+      console.log('Constraint: Incorrect admin');
+      res.render('warning', {warning: 'Error: You can you only create events for RSOs you are admin of!'});
     }
-    let query = mysql.format(event_create_query, newEvent);
-    db.query(query, function(error, results, fields) {
-        console.log(error);
-        console.log(results);
-        console.log(fields);
-        res.redirect('/event/' + results.insertId);
-    });
+    else {
+      var newEvent = {
+        name: req.body.name,
+        date: req.body.date,
+        contactPhone: req.body.contactPhone,
+        contactEmail: req.body.contactEmail,
+        type: req.body.type,
+        scope: req.body.scope,
+        location_locationID: results[0][0].insertId,
+        rso_rsoID: req.body.rso
+      }
+      let query = mysql.format(event_create_query, newEvent);
+      db.query(query, function(error, results2, fields) {
+          console.log('SUCCESSFUL: Created Event!');
+          res.redirect('/event/' + results2.insertId);
+      });
+    }
   });
 }
 exports.event_list = function(req, res, db) {
@@ -77,12 +85,8 @@ exports.event_details = function(req,res,db) {
       return defered.promise;
     }
     q.all([eventQuery()]).then(function(results){
-      console.log(results[0][0][0]);
       let query = mysql.format('SELECT * FROM comment,user WHERE event_eventID = ? AND userID = user_userID;', [results[0][0][0].eventID]);
-      console.log(query);
       db.query(query, function(error, results2, fields) {
-          console.log(error);
-          console.log(results2);
           session.id ?
           res.render('event_details', {title: 'Event', 'event': results[0][0][0], comments: results2}) :
           res.render('event_details', {title: 'Event', 'event': results[0][0][0], comments: results2, error: 'error'});
@@ -97,9 +101,6 @@ exports.event_details_post = function(req,res,db) {
   }
   var query = mysql.format('INSERT INTO comment SET ?;', newComment);
   db.query(query, function(error,results,fields) {
-    console.log(error);
-    console.log(results);
-    console.log(fields);
     exports.event_details(req,res,db);
   });
 };
@@ -115,7 +116,6 @@ exports.event_search_get = function(req,res,db) {
       return defered.promise;
     }
     q.all([locationQuery(),rsoQuery()]).then(function(results){
-      console.log(results);
       res.render('event_search', {locations: results[0][0], rsos: results[1][0]});
     });
 
@@ -142,11 +142,7 @@ exports.event_search_post = function(req,res,db) {
   }
   string += ';';
   var query = mysql.format(string, filters);
-  console.log(filters);
-  console.log(query);
   db.query(query, function(error, results, fields) {
-    console.log(error);
-    console.log(results);
     res.render('event_list', {title: 'Search Results!', event_list: results, filters: filters});
   });
 }
