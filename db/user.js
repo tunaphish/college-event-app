@@ -44,10 +44,11 @@ exports.user_create_post = function(req, res, db) {
   }
   let query = mysql.format(user_create_query, newUser);
   db.query(query, function(error, results, fields) {
-      console.log(error);
-      console.log(results);
-      console.log(fields);
-      res.redirect('/user/' + results.insertId);
+    session.id = results.insertId;
+    session.emailAddress = req.body.email;
+    session.type = req.body.type;
+    session.fullname = req.body.firstname + ' ' + req.body.lastname;
+    res.redirect('/');
   });
 }
 exports.user_details = function(req,res, db) {
