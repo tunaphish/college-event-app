@@ -39,8 +39,8 @@ block content
       div.form-group
         label(for='map') Location: 
         input#locationName.form-control(type='text', placeholder='Select from Map' name='locationName' required readonly)
-        input#locationLat.form-control(type='hidden', placeholder='Select from Map' name='locationLat' )
-        input#locationLng.form-control(type='hidden', placeholder='Select from Map' name='locationLng' )
+        input#locationLat.form-control(type='hidden', placeholder='Select from Map' name='locationLat' required)
+        input#locationLng.form-control(type='hidden', placeholder='Select from Map' name='locationLng' required)
         div#map
       button.btn.btn-primary(type='submit') Submit
   else

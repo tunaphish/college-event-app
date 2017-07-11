@@ -2,6 +2,7 @@ var http = require('http');
 var mysql = require('mysql');
 var q = require('Q');
 var session = require('express-session');
+var moment = require('moment');
 
 let event_create_query = 'INSERT INTO event SET ?;';
 let public_event_list_query = 'SELECT * FROM event WHERE scope = "Public" ORDER BY date';
@@ -31,7 +32,7 @@ exports.event_create_post = function (req, res, db) {
   }
   function checkConflicting() {
     var defered = q.defer();
-    db.query(mysql.format('SELECT l.name as name, e.date as date from event e, location l where e.location_locationID= ?;', [req.body.location]), defered.makeNodeResolver());
+    db.query(mysql.format('SELECT COUNT(*) as count FROM event e, location l WHERE e.location_locationID = l.locationID AND e.date = ? AND l.name = ?;', [req.body.date, req.body.locationName]), defered.makeNodeResolver());
     return defered.promise;
   }
   function locationQuery() {
@@ -45,11 +46,13 @@ exports.event_create_post = function (req, res, db) {
     db.query(query, defered.makeNodeResolver());
     return defered.promise;
   }
-  q.all([locationQuery(),checkAdmin()]).then(function(results){
-    console.log(results[1][0][0]);
-    console.log(results[1][0][0].user_adminID);
-    if (session.id !== results[1][0][0].user_adminID) {
-      console.log('Constraint: Incorrect admin');
+  q.all([locationQuery(),checkAdmin(),checkConflicting()]).then(function(results){
+    console.log(results[2][0][0].count);
+    if (results[2][0][0].count > 0) {
+      var string = 'Error: There is already an event at ' + req.body.locationName + ' during ' + req.body.date;
+      res.render('warning', {warning: string});
+    }
+    else if (session.id !== results[1][0][0].user_adminID) {
       res.render('warning', {warning: 'Error: You can you only create events for RSOs you are admin of!'});
     }
     else {
@@ -65,7 +68,6 @@ exports.event_create_post = function (req, res, db) {
       }
       let query = mysql.format(event_create_query, newEvent);
       db.query(query, function(error, results2, fields) {
-          console.log('SUCCESSFUL: Created Event!');
           res.redirect('/event/' + results2.insertId);
       });
     }
