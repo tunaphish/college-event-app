@@ -32,10 +32,12 @@ exports.RSO_create_post = function(req, res, db) {
     university_universityID: req.body.university,
     user_adminID: req.body.admin
   }
+  var temp = mysql.format('UPDATE user SET type = "Admin" WHERE userID = ?;', [req.body.admin]);
+  db.query(mysql.format('UPDATE user SET type = "Admin" WHERE userID = ?;', [req.body.admin]), function(error, results, fields) {
+
+  });
   let query = mysql.format(rso_create_query, newRSO);
   db.query(query, function(error, results, fields) {
-      console.log(error);
-      console.log(results);
       res.redirect('/RSO/' + results.insertId);
   });
 }
@@ -48,7 +50,6 @@ exports.RSO_list = function(req, res, db) {
 exports.RSO_details = function(req,res,db) {
   var query = mysql.format(rso_detail_query, [req.params.id]);
   db.query(query, function(error, results, fields){
-      console.log(results);
       var rendered = false;
       if (!session.id) {
         res.render('rso_details',{title: 'RSO',rso: results, error: 'Please login to join an RSO'});

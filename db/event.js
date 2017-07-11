@@ -27,6 +27,11 @@ exports.event_create_get = function(req, res, db) {
     });
 }
 exports.event_create_post = function (req, res, db) {
+  db.query(mysql.format('SELECT user_adminID from rso where rsoID = ?;', [req.body.rso]), function(error,results,fields) {
+    console.log(error);
+    console.log(results);
+    if (session.id !== results[0].user_adminID) res.redirect('/');
+  });
   function locationQuery() {
     var defered = q.defer();
     var newLocation = {
