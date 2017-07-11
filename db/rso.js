@@ -26,19 +26,27 @@ exports.RSO_create_get = function(req, res, db) {
   }
 }
 exports.RSO_create_post = function(req, res, db) {
-  var newRSO = {
-    name: req.body.name,
-    active: 'inactive',
-    university_universityID: req.body.university,
-    user_adminID: req.body.admin
+  //Change user into admin
+  db.query(mysql.format('UPDATE user SET type = "Admin" WHERE userID = ?;', [req.body.admin]));
+  function rsoQuery() {
+    var defered = q.defer();
+    var newRSO = {
+      name: req.body.name,
+      active: 'inactive',
+      university_universityID: req.body.university,
+      user_adminID: req.body.admin
+    }
+    db.query(mysql.format(rso_create_query, newRSO), defered.makeNodeResolver());
+    return defered.promise;
   }
-  var temp = mysql.format('UPDATE user SET type = "Admin" WHERE userID = ?;', [req.body.admin]);
-  db.query(mysql.format('UPDATE user SET type = "Admin" WHERE userID = ?;', [req.body.admin]), function(error, results, fields) {
-
-  });
-  let query = mysql.format(rso_create_query, newRSO);
-  db.query(query, function(error, results, fields) {
-      res.redirect('/RSO/' + results.insertId);
+  q.all([rsoQuery()]).then(function(results){
+    var studentRSO = {
+      user_userID: req.body.admin,
+      RSO_rsoID: results[0][0].insertId
+    }
+    db.query(mysql.format('INSERT INTO students_rso SET ?;', studentRSO), function(error,results2,fields){
+      res.redirect('/RSO/' + results[0][0].insertId);
+    });
   });
 }
 exports.RSO_list = function(req, res, db) {
@@ -48,33 +56,46 @@ exports.RSO_list = function(req, res, db) {
   });
 }
 exports.RSO_details = function(req,res,db) {
-  var query = mysql.format(rso_detail_query, [req.params.id]);
-  db.query(query, function(error, results, fields){
-      var rendered = false;
-      if (!session.id) {
-        res.render('rso_details',{title: 'RSO',rso: results, error: 'Please login to join an RSO'});
-        rendered = true;
-      }
-      else {
-        for (var i in results) {
-          if (results[i].user_userID === session.id) {
-            res.render('rso_details', {title: 'RSO', rso:results, error: 'You are a member of this RSO'});
-            rendered = true;
-            break;
-          }
+  function rsoQuery() {
+    var defered = q.defer();
+    db.query(mysql.format('SELECT *, r.name as name, u.name as uniName FROM rso r, university u WHERE rsoID = ? AND university_universityID = universityID;', [req.params.id]), defered.makeNodeResolver());
+    return defered.promise;
+  }
+  q.all([rsoQuery()]).then(function(results){
+    if (!session.id) {
+      res.render('rso_details',{title: 'RSO',rso: results[0][0], error: 'Please login to join an RSO'});
+    }
+    else {
+      let query = mysql.format('SELECT COUNT(*) as count from students_rso WHERE user_userID = ? AND RSO_rsoID = ?;', [session.id, req.params.id]);
+      db.query(query, function(error,results2,fields){
+        if (results2[0].count > 0){
+          res.render('rso_details', {title: 'RSO', rso:results[0][0], authorized: 'authorized'});
         }
-      }
-      if (!rendered) res.render('rso_details',{title: 'RSO',rso: results});
+        else {
+          res.render('rso_details',{title: 'RSO',rso: results[0][0]});
+        }
+      });
+    }
   });
+
 }
 exports.RSO_details_post = function(req,res,db) {
-  var member = {
-    user_userID: session.id,
-    RSO_rsoID: req.params.id
+  if (req.body.button === 'leave') {
+    db.query(mysql.format('DELETE FROM students_rso WHERE user_userID = ? AND RSO_rsoID = ?;', [session.id,req.params.id]));
   }
-  var query = mysql.format('INSERT INTO students_rso set ?;', member);
-  db.query(query, function(error, results, fields) {
-    console.log(results);
+  else {
+    let member = {
+      user_userID: session.id,
+      RSO_rsoID: req.params.id
+    }
+    db.query(mysql.format('INSERT INTO students_rso set ?;', member));
+  }
+  db.query(mysql.format('SELECT COUNT(*) as count FROM students_rso WHERE RSO_rsoID = ?;', [req.params.id]), function(error,results,fields) {
+    let activity = results[0].count > 4 ? 'active' : 'inactive';
+    console.log(activity);
+    db.query(mysql.format('UPDATE rso SET active = ? WHERE rsoID = ?;', [activity, req.params.id]), function(error,results,fields) {
+      console.log(results);
+    });
     exports.RSO_details(req,res,db);
-  })
+  });
 }

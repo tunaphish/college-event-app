@@ -8,6 +8,10 @@ block content
   
   if error
     p= error
+  
+  else if authorized
+    form(method='POST' action='')
+      button.btn.btn-primary(type='submit' name='button' value='leave') Leave
   else
     form(method='POST' action='')
-      button.btn.btn-primary(type='submit') Join
+      button.btn.btn-primary(type='submit' name='button' value='join') Join
