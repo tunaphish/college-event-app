@@ -6,6 +6,13 @@ let user_create_query = 'INSERT INTO user SET ?;';
 let user_detail_query = 'SELECT * FROM user WHERE userID = ?;';
 
 exports.user_login_get = function(req,res,db) {
+  if (session.id) {
+    delete session.id;
+    delete session.emailAddress;
+    delete session.type;
+    delete session.fullname;
+    res.redirect('/');
+  }
   res.render('user_login', {title: 'Login'});
 }
 exports.user_login_post = function(req,res,db) {
