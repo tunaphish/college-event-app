@@ -2,11 +2,19 @@ extends layout
 
 block content
   h1= title 
-  h3 Please view our public events!
+  h3 Public Events
   
-  each event in event_list
-    - var url = '/event/' + event.eventID
-    li 
-      a(href=url) #{event.name}  - #{event.date}
-  else
-    li There are no events.
+  table(class='table')
+    thead
+      tr
+        th Event
+        th Date
+    tbody
+      each event in event_list
+        - var url = '/event/' + event.eventID
+        tr
+          td 
+            a(href=url) #{event.name} 
+          td #{event.date}
+      else
+        li There are no events.

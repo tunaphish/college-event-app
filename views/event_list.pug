@@ -2,13 +2,22 @@ extends layout
 
 block content
   h1= title
-  
-  ul
-  each event in event_list
-    - var url = '/event/' + event.eventID
-    li 
-      a(href=url) #{event.name} 
-  else
-    li There are no events.
+      
+  table(class='table')
+    thead
+      tr
+        th Event
+        th Date
+        th Scope
+    tbody
+      each event in event_list
+        - var url = '/event/' + event.eventID
+        tr
+          td 
+            a(href=url) #{event.name} 
+          td #{event.date}
+          td #{event.scope}
+      else
+        li There are no events.
     
   

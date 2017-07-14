@@ -3,11 +3,20 @@ extends layout
 block content
   h1= title
   
-  ul
-  each rso in rso_list
-    - var url = '/RSO/' + rso.rsoID
-    li
-      a(href=url) #{rso.rsoName} - #{rso.uniName} - #{rso.active} 
+  table(class='table')
+    thead
+      tr
+        th RSO
+        th University
+        th Active
+    tbody
+      each rso in rso_list
+        - var url = '/RSO/' + rso.rsoID
+        tr
+          td 
+            a(href=url) #{rso.rsoName} 
+          td #{rso.uniName}
+          td #{rso.active}
 
-  else
-    li There are no RSOs.
+      else
+        li There are no RSOs.
