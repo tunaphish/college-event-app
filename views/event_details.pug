@@ -14,12 +14,16 @@ block content
   
   hr
   h1= 'Comments'
-
   if comments
-    each comment in comments
-      - var url = '/comment/' + comment.commentID
-      p 
-        a(href=url) #{comment.firstname} #{comment.lastname} - #{comment.content}
+    table(class='table')
+      tbody
+      each comment in comments
+        - var url = '/comment/' + comment.commentID
+        tr
+          td
+            a(href=url) #{comment.firstname} #{comment.lastname}
+          td #{comment.content}
+    
   
   form(method='POST' action='')
     div.form-group
