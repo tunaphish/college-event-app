@@ -4,7 +4,7 @@ html(lang='en')
     title= title
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js')
     link(rel='stylesheet', href='/stylesheets/bootstrappaper.min.css')
@@ -14,15 +14,20 @@ html(lang='en')
       div(class='row')
         div(class='col-sm-2')
           block sidebar
-            nav(class='navbar navbar-fixed-side navbar-light bg-faded' )
-              <a class="navbar-brand nav-item nav-link" href="/">College Events</a>
+            nav(class='navbar' )
+              div(class='navbar-header')
+                a(class="navbar-brand" href="/") College Events
+              
               a(class='nav-item nav-link' href='/user/login') Login/Logout
+              br
               a(class='nav-item nav-link' href='/user/create') Signup
               hr
               a(class='nav-item nav-link' href='/RSO/create') Create RSO
+              br
               a(class='nav-item nav-link' href='/RSOs') RSO List
               hr
               a(class='nav-item nav-link' href='/event/create') Create Event
+              br
               a(class='nav-item nav-link' href='/event/search') Search Event
               hr
               a(class='nav-item nav-link' href='/university/create') Create University
