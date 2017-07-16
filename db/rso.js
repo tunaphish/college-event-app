@@ -36,6 +36,7 @@ exports.RSO_create_post = function(req, res, db) {
       university_universityID: req.body.university,
       user_adminID: req.body.admin
     }
+    session.type = 'Admin';
     db.query(mysql.format(rso_create_query, newRSO), defered.makeNodeResolver());
     return defered.promise;
   }
