@@ -21,8 +21,9 @@ DROP TABLE IF EXISTS `sitedb`.`location` ;
 
 CREATE TABLE IF NOT EXISTS `sitedb`.`location` (
   `locationID` INT NOT NULL AUTO_INCREMENT,
-  `longitude` DECIMAL(10,6) NULL,
+  `name` VARCHAR(255) NULL,
   `latitude` DECIMAL(10,6) NULL,
+  `longitude` DECIMAL(10,6) NULL,
   PRIMARY KEY (`locationID`))
 ENGINE = InnoDB;
 
@@ -59,6 +60,8 @@ CREATE TABLE IF NOT EXISTS `sitedb`.`user` (
   `password` VARCHAR(255) NULL,
   `type` VARCHAR(255) NULL,
   `university_universityID` INT NOT NULL,
+  `firstname` VARCHAR(255) NULL,
+  `lastname` VARCHAR(255) NULL,
   PRIMARY KEY (`userID`, `university_universityID`),
   INDEX `fk_user_university1_idx` (`university_universityID` ASC),
   CONSTRAINT `fk_user_university1`
@@ -77,7 +80,7 @@ DROP TABLE IF EXISTS `sitedb`.`RSO` ;
 CREATE TABLE IF NOT EXISTS `sitedb`.`RSO` (
   `rsoID` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
-  `active` TINYINT NULL,
+  `active` VARCHAR(255) NULL,
   `university_universityID` INT NOT NULL,
   `user_adminID` INT NOT NULL,
   PRIMARY KEY (`rsoID`, `university_universityID`, `user_adminID`),
@@ -104,26 +107,24 @@ DROP TABLE IF EXISTS `sitedb`.`event` ;
 CREATE TABLE IF NOT EXISTS `sitedb`.`event` (
   `eventID` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
-  `startDate` DATETIME NULL,
-  `endDate` DATETIME NULL,
-  `locationID` INT NULL,
+  `date` DATETIME NULL,
   `contactPhone` VARCHAR(10) NULL,
   `contactEmail` VARCHAR(255) NULL,
   `type` VARCHAR(255) NULL,
   `scope` VARCHAR(255) NULL,
   `location_locationID` INT NOT NULL,
-  `user_userID` INT NOT NULL,
-  PRIMARY KEY (`eventID`, `location_locationID`, `user_userID`),
+  `RSO_rsoID` INT NOT NULL,
+  PRIMARY KEY (`eventID`, `location_locationID`, `RSO_rsoID`),
   INDEX `fk_event_location1_idx` (`location_locationID` ASC),
-  INDEX `fk_event_user1_idx` (`user_userID` ASC),
+  INDEX `fk_event_RSO1_idx` (`RSO_rsoID` ASC),
   CONSTRAINT `fk_event_location1`
     FOREIGN KEY (`location_locationID`)
     REFERENCES `sitedb`.`location` (`locationID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_event_user1`
-    FOREIGN KEY (`user_userID`)
-    REFERENCES `sitedb`.`user` (`userID`)
+  CONSTRAINT `fk_event_RSO1`
+    FOREIGN KEY (`RSO_rsoID`)
+    REFERENCES `sitedb`.`RSO` (`rsoID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
